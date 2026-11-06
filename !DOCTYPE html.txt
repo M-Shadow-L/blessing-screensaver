@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>送你一份祝福</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; width: 100vw; height: 100vh; overflow: hidden;
+      font-family: "Microsoft YaHei", sans-serif;
+      background: radial-gradient(circle, #fff4f8, #ffd8e8);
+    }
+    #app { position: relative; width: 100%; height: 100%; overflow: hidden; }
+    .card {
+      position: absolute; width: 145px; min-height: 58px; padding: 10px;
+      display: grid; place-items: center; text-align: center;
+      border: 1px solid #ffffffaa; border-radius: 16px;
+      box-shadow: 0 8px 24px #a44c6c30; color: #573849;
+      font-size: 16px; font-weight: 600;
+      animation: appear .5s ease both;
+    }
+    @keyframes appear {
+      from { opacity: 0; transform: scale(.7); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    const app = document.querySelector("#app");
+    const words = ["好好爱自己", "好好吃饭", "保持好心情", "我想你了",
+      "顺顺利利", "别熬夜", "天凉了多穿衣服", "愿你每天都开心"];
+    const colors = ["#ffd7e5", "#d9edff", "#dcf5dc", "#fff2b8", "#f7d9ff"];
+
+    function showBlessings() {
+      app.replaceChildren();
+      const w = innerWidth, h = innerHeight;
+      for (let i = 0; i < 36; i++) {
+        const t = i / 36 * Math.PI * 2;
+        const x = 16 * Math.sin(t) ** 3;
+        const y = 13 * Math.cos(t) - 5 * Math.cos(2*t)
+          - 2 * Math.cos(3*t) - Math.cos(4*t);
+        const card = document.createElement("div");
+        card.className = "card";
+        card.textContent = words[Math.floor(Math.random() * words.length)];
+        card.style.background = colors[Math.floor(Math.random() * colors.length)];
+        card.style.left = Math.max(0, Math.min(w - 145, w/2 + x*13 - 72)) + "px";
+        card.style.top = Math.max(0, Math.min(h - 58, h/2 - y*13 - 29)) + "px";
+        card.style.animationDelay = (i * 25) + "ms";
+        app.append(card);
+      }
+    }
+
+    showBlessings();
+    setTimeout(() => {
+      [...app.children].forEach(card => {
+        card.style.left = Math.random() * Math.max(0, innerWidth - 145) + "px";
+        card.style.top = Math.random() * Math.max(0, innerHeight - 58) + "px";
+      });
+    }, 1800);
+    addEventListener("resize", showBlessings);
+    addEventListener("keydown", e => {
+      if (e.code === "Space") app.replaceChildren();
+    });
+  </script>
+</body>
+</html>
